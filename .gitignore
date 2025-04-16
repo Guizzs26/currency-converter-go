@@ -1,2 +1,28 @@
+# Ignore Go build artifacts and dependencies
+/bin/
+/build/
+/vendor/
+
+# Ignore editor specific configuration files
+.vscode/
+/.idea/
+
+# Ignore system files (Mac and Windows)
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore Go compiled files
+*.out
+*.exe
+*.exe~
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignore local environment configuration file
 .env
-bin

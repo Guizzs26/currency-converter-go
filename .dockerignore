@@ -1,0 +1,28 @@
+# Ignore Go build artifacts
+*.log
+*.out
+*.tmp
+*.swp
+*.swo
+
+# Ignore the binary files directory
+/bin/
+/build/
+/target/
+
+# Ignore editor specific directories
+.vscode/
+/.idea/
+
+# Ignore Go dependency directory
+/vendor/
+
+# Ignore system specific files
+.DS_Store
+Thumbs.db
+
+# Ignore .env file
+.env
+
+# Optionally ignore the Dockerfile if needed
+Dockerfile
