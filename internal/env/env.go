@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Guizzs26/currency-converter-go/internal/env/config"
+	"github.com/Guizzs26/currency-converter-go/internal/config"
 	"github.com/joho/godotenv"
 )
 
@@ -24,10 +24,21 @@ func InitConfig() config.Config {
 
 	addr := mustGetString("ADDR", ":3333")
 	env := mustGetString("ENV", "development")
+	connStr := mustGetString("DB_ADDR", "postgres://pguser:pgpass@localhost:5455/currency_converter?sslmode=disable")
+	maxOpenConns := mustGetInt("DB_MAX_OPEN_CONNS", 10)
+	maxIdleConns := mustGetInt("DB_MAX_IDLE_CONNS", 5)
+	maxIdleTime := mustGetString("DB_MAX_IDLE_TIME", "15m")
 
+	db := config.DBConfig{
+		ConnStr:      connStr,
+		MaxOpenConns: maxOpenConns,
+		MaxIdleConns: maxIdleConns,
+		MaxIdleTime:  maxIdleTime,
+	}
 	cfg := config.Config{
 		Addr: addr,
 		Env:  env,
+		DB:   db,
 	}
 
 	return cfg
