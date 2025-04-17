@@ -1,6 +1,18 @@
 package store
 
-import "database/sql"
+import (
+	"context"
+	"database/sql"
+
+	"github.com/Guizzs26/currency-converter-go/internal/model"
+	"github.com/Guizzs26/currency-converter-go/internal/store/postgres"
+)
+
+type ConversionRepository interface {
+	SaveConversion(ctx context.Context, conv *model.Conversion) error
+	// GetExchangeRate(ctx context.Context, from, to string) (float64, error)
+	// ListSupportedCurrencies(ctx context.Context) ([]string, error)
+}
 
 type Storage struct {
 	Conversion ConversionRepository
@@ -8,6 +20,6 @@ type Storage struct {
 
 func NewPostgresStorage(db *sql.DB) *Storage {
 	return &Storage{
-		Conversion: NewPostgreConversionRepository(db),
+		Conversion: postgres.NewPostgresConversionStore(db),
 	}
 }
