@@ -37,3 +37,34 @@ func WriteErrorJSON(w http.ResponseWriter, message string, status int) error {
 
 	return WriteJSON(w, &envolope{Error: message}, status)
 }
+
+func ValidationErrorJSON(w http.ResponseWriter, r *http.Request, verr error) {
+	errors := make(map[string]string)
+
+	if ve, ok := verr.(validator.ValidationErrors); ok {
+		for _, e := range ve {
+			field := e.Field()
+			tag := e.Tag()
+
+			switch tag {
+			case "required":
+				errors[field] = "is required"
+			case "len":
+				errors[field] = "must be exactly " + e.Param() + " characters long"
+			case "gt":
+				errors[field] = "must be greater than " + e.Param()
+			case "uppercase":
+				errors[field] = "must be uppercase"
+			default:
+				errors[field] = "is invalid"
+			}
+		}
+	}
+
+	response := map[string]any{
+		"error":  "validation failed",
+		"fields": errors,
+	}
+
+	WriteJSON(w, response, http.StatusBadRequest)
+}

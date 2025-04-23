@@ -26,6 +26,11 @@ func (ch *ConversionHandler) Convert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := helpers.Validate.Struct(req); err != nil {
+		helpers.ValidationErrorJSON(w, r, err)
+		return
+	}
+
 	conv := &model.Conversion{
 		From:         req.From,
 		To:           req.To,
