@@ -22,7 +22,7 @@ func (ch *ConversionHandler) Convert(w http.ResponseWriter, r *http.Request) {
 	var req ConversionRequest
 
 	if err := helpers.ReadJSON(w, r, &req); err != nil {
-		helpers.WriteErrorJSON(w, "invalid request body", http.StatusBadRequest)
+		helpers.BadRequestError(w, r, err)
 		return
 	}
 
@@ -37,7 +37,7 @@ func (ch *ConversionHandler) Convert(w http.ResponseWriter, r *http.Request) {
 
 	result, err := ch.conversionService.Convert(ctx, conv)
 	if err != nil {
-		helpers.WriteErrorJSON(w, "failed to convert currency", http.StatusInternalServerError)
+		helpers.InternalServerError(w, r, err)
 		return
 	}
 
@@ -52,6 +52,6 @@ func (ch *ConversionHandler) Convert(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := helpers.WriteJSON(w, resp, 201); err != nil {
-		helpers.WriteErrorJSON(w, err.Error(), http.StatusInternalServerError)
+		helpers.InternalServerError(w, r, err)
 	}
 }
