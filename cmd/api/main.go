@@ -19,16 +19,18 @@ type application struct {
 func main() {
 	cfg := env.InitConfig()
 
-	app := &application{
-		config: cfg,
-	}
-
 	db, err := db.NewPostgresConnection(cfg.DB.ConnStr, cfg.DB.MaxOpenConns, cfg.DB.MaxIdleConns, cfg.DB.MaxIdleTime)
 	if err != nil {
 		log.Fatal(err)
 	}
 	storage := store.NewPostgresStorage(db)
-	conversionService := service.NewConversionService(storage.Conversion)
+
+	app := &application{
+		config: cfg,
+		store:  *storage,
+	}
+
+	conversionService := service.NewConversionService(app.store.Conversion)
 	conversionHandler := handler.NewConversionHandler(conversionService)
 
 	r := app.configureRouter(conversionHandler)

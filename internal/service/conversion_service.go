@@ -22,16 +22,8 @@ func NewConversionService(repo store.ConversionRepository) *ConversionServiceImp
 	}
 }
 
-func (cs *ConversionServiceImpl) Convert(ctx context.Context, input *model.Conversion) (*model.Conversion, error) {
-	convertedAmount := input.Amount * input.ExchangeRate
-
-	conversion := &model.Conversion{
-		From:            input.From,
-		To:              input.To,
-		Amount:          input.Amount,
-		ExchangeRate:    input.ExchangeRate,
-		ConvertedAmount: convertedAmount,
-	}
+func (cs *ConversionServiceImpl) Convert(ctx context.Context, conversion *model.Conversion) (*model.Conversion, error) {
+	conversion.ConvertedAmount = conversion.Amount * conversion.ExchangeRate
 
 	if err := cs.repo.SaveConversion(ctx, conversion); err != nil {
 		return nil, fmt.Errorf("failed to save convertion: %w", err)
